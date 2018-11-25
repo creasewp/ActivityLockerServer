@@ -1,10 +1,10 @@
 ﻿@model ActivityLockerServer.Models.UserActivity
 
 @{
-    ViewData["Title"] = "Activity Details";
+    ViewData["Title"] = "Task Details";
 }
 
-<h2>Activity Details</h2>
+<h2>Task Details</h2>
 
 <div>
     <dl class="dl-horizontal">
@@ -33,9 +33,16 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<h2>Activity Users</h2>
+<h2>Task Users</h2>
+<table cellpadding="15" cellspacing="15" width="100%">
+    <tr>
+        <td><h3>Total: 25</h3></td>
+        <td><h3>Active: 22</h3></td>
+        <td><h3>Exited: 3</h3></td>
+    </tr>
+</table>
 
-<table class="table">
+<table class="table" >
     <thead>
         <tr>
             <th>

@@ -14,6 +14,7 @@ namespace ActivityLockerServer.Data
         {
         }
 
+        public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<UserActivityUser> UserActivityUsers { get; set; }
     }

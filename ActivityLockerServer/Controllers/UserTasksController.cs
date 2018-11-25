@@ -11,11 +11,11 @@ using System.Text;
 
 namespace ActivityLockerServer.Controllers
 {
-    public class UserActivitiesController : Controller
+    public class UserTasksController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public UserActivitiesController(ApplicationDbContext context)
+        public UserTasksController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -23,7 +23,11 @@ namespace ActivityLockerServer.Controllers
         // GET: UserActivities
         public async Task<IActionResult> Index()
         {            
-            return View(await _context.UserActivities.Where(item => item.UserId == User.Identity.Name).ToListAsync());
+            return View(await _context.UserActivities
+                .Include("UserGroup")
+                .Where(item => item.UserId == User.Identity.Name)
+                .OrderByDescending(item => item.CreatedDateTime)
+                .ToListAsync());
         }
 
         // GET: UserActivities/Details/5
@@ -48,7 +52,7 @@ namespace ActivityLockerServer.Controllers
         // GET: UserActivities/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new UserTaskViewModel(User.Identity.Name,_context));
         }
 
         // POST: UserActivities/Create
@@ -56,25 +60,36 @@ namespace ActivityLockerServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,Code,Url,UserId,TenantId")] UserActivity userActivity)
+        public async Task<IActionResult> Create([Bind("Id,Description,Code,Url,SelectedUserGroups")] UserTaskViewModel userActivityVM)
         {
             if (ModelState.IsValid)
             {
-                userActivity.UserId = User.Identity.Name;
-                userActivity.TenantId = "Mead354";//TODO
-                userActivity.Code = GenerateRandomCode();
+                foreach (string groupId in userActivityVM.SelectedUserGroups)
+                {
+                    //get the Url from the group
+                    UserActivity userActivity = new UserActivity();
+                    userActivity.Id = Guid.NewGuid().ToString();
+                    userActivity.Description = userActivityVM.Description;
+                    userActivity.Url = _context.UserGroups.Single(item => item.Id == groupId).WebAddress;
+                    userActivity.UserGroup = _context.UserGroups.Single(item => item.Id == groupId);
+                    userActivity.UserId = User.Identity.Name;
+                    userActivity.TenantId = "Mead354";//TODO
+                    userActivity.Code = GenerateRandomCode();
+                    userActivity.CreatedDateTime = DateTime.UtcNow;
+                    userActivity.ActiveBeforeDateTime = DateTime.MinValue;//deactivate
+                    //add some students for demo
+                    userActivity.ActivityUsers = new List<UserActivityUser>();
+                    userActivity.ActivityUsers.Add(new UserActivityUser() { Name = "student1@mead354.org", Status = UserActivityUserStatus.Waiting });
+                    userActivity.ActivityUsers.Add(new UserActivityUser() { Name = "student2@mead354.org", Status = UserActivityUserStatus.Active });
+                    userActivity.ActivityUsers.Add(new UserActivityUser() { Name = "student3@mead354.org", Status = UserActivityUserStatus.Exited });
 
-                //add some students for emo
-                userActivity.ActivityUsers = new List<UserActivityUser>();
-                userActivity.ActivityUsers.Add(new UserActivityUser() { Name = "student1@mead354.org", Status = UserActivityUserStatus.Waiting });
-                userActivity.ActivityUsers.Add(new UserActivityUser() { Name = "student2@mead354.org", Status = UserActivityUserStatus.Active });
-                userActivity.ActivityUsers.Add(new UserActivityUser() { Name = "student3@mead354.org", Status = UserActivityUserStatus.Exited });
+                    _context.Add(userActivity);
+                    await _context.SaveChangesAsync();
+                }
 
-                _context.Add(userActivity);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(userActivity);
+            return View(userActivityVM);
         }
 
         private string GenerateRandomCode()

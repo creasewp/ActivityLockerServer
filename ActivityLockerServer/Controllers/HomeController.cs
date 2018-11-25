@@ -22,6 +22,12 @@ namespace ActivityLockerServer.Controllers
             return View();
         }
 
+        public IActionResult UserGuide()
+        {
+            ViewData["Message"] = "Your user guide page.";
+
+            return View();
+        }
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";

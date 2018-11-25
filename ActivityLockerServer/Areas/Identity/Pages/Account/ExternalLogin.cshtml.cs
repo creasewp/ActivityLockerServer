@@ -59,7 +59,7 @@ namespace ActivityLockerServer.Areas.Identity.Pages.Account
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = "Activity/Views/UserActivities", string remoteError = null)
+        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = "UserTasks", string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)

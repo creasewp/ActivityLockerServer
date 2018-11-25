@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ActivityLockerServer.Models.UserActivity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>My Tasks</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserGroup.WebAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserGroup.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @*@Html.ActionLink(item.Description, "Details/" + item.Id, "UserActivities", null, htmlAttributes: new { title = "Click to see student activity for this task" })*@
+                <a asp-action="Details" asp-route-id="@item.Id" title="Click to see student activity for this task">@Html.DisplayFor(modelItem => item.Description)</a>
+            </td>
+            <td>
+                <a href="@item.UserGroup.WebAddress" target="_blank">@item.UserGroup.WebAddress</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserGroup.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-action="Activate" asp-route-id="@item.Id">Activate</a> |
+                <a asp-action="Deactivate" asp-route-id="@item.Id">De-Activate</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

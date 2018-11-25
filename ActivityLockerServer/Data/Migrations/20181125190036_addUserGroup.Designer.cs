@@ -4,14 +4,16 @@ using ActivityLockerServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ActivityLockerServer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181125190036_addUserGroup")]
+    partial class addUserGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +26,7 @@ namespace ActivityLockerServer.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("ActiveBeforeDateTime");
-
                     b.Property<string>("Code");
-
-                    b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<string>("Description");
 
@@ -36,13 +34,9 @@ namespace ActivityLockerServer.Data.Migrations
 
                     b.Property<string>("Url");
 
-                    b.Property<string>("UserGroupId");
-
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserGroupId");
 
                     b.ToTable("UserActivities");
                 });
@@ -242,13 +236,6 @@ namespace ActivityLockerServer.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ActivityLockerServer.Models.UserActivity", b =>
-                {
-                    b.HasOne("ActivityLockerServer.Models.UserGroup", "UserGroup")
-                        .WithMany()
-                        .HasForeignKey("UserGroupId");
                 });
 
             modelBuilder.Entity("ActivityLockerServer.Models.UserActivityUser", b =>
