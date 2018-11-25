@@ -180,7 +180,11 @@ namespace ActivityLockerServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var userActivity = await _context.UserActivities.FindAsync(id);
+            var userActivity = _context.UserActivities.Include("ActivityUsers").Single(item => item.Id == id);
+            foreach (var activityUser in userActivity.ActivityUsers)
+            {
+                _context.UserActivityUsers.Remove(activityUser);
+            }
             _context.UserActivities.Remove(userActivity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
