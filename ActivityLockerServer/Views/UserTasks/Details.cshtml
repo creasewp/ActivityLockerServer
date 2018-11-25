@@ -21,10 +21,16 @@
             @Html.DisplayFor(model => model.Code)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Url)
+            @Html.DisplayNameFor(model => model.UserGroup.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Url)
+            @Html.DisplayFor(model => model.UserGroup.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGroup.WebAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserGroup.WebAddress)
         </dd>
     </dl>
 </div>
@@ -35,7 +41,7 @@
 
 <h2>Task Users</h2>
 <table cellpadding="15" cellspacing="15" width="100%">
-    <tr>
+    <tr style="background-color:gray;color:white">
         <td><h3>Total: 25</h3></td>
         <td><h3>Active: 22</h3></td>
         <td><h3>Exited: 3</h3></td>

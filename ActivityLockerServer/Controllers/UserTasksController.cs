@@ -40,6 +40,7 @@ namespace ActivityLockerServer.Controllers
 
             var userActivity = await _context.UserActivities
                 .Include("ActivityUsers")
+                .Include("UserGroup")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (userActivity == null)
             {

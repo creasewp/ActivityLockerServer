@@ -15,7 +15,7 @@ namespace ActivityLockerServer.Models
 
         public UserTaskViewModel(string userId, ApplicationDbContext context)
         {
-            UserGroups = context.UserGroups.Where(item => item.UserId == userId).ToList();
+            UserGroups = context.UserGroups.Where(item => item.UserId == userId).OrderBy(item => item.Description).ToList();
         }
 
         public IList<UserGroup> UserGroups { get; set; }
