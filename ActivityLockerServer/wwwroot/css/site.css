@@ -35,3 +35,20 @@ body {
         display: none;
     }
 }
+/* override from bootstrap*/
+.navbar-brand2 {
+    float: left;
+    height: 50px;
+    padding: 5px 5px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.navbar-brand2:hover,
+.navbar-brand2:focus {
+    text-decoration: none;
+}
+
+.navbar-brand2 > img {
+    display: block;
+}
